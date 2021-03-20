@@ -16,14 +16,8 @@ LightSwitch::LightSwitch(int pin_number, bool is_analog_mode)
 
 void LightSwitch::update(LightControl &light)
 {
-    if(millis() < last_switch_time)
-    {
-        last_switch_time = millis();
-    }
-
     int pin_state = 0;
 
-    
     if (millis() - last_read_time > minimal_read_time || millis() < last_read_time)
     {
         if(is_in_analog_mode)
@@ -41,11 +35,11 @@ void LightSwitch::update(LightControl &light)
         pin_state = last_state;
     }
     
-
-    if(pin_state == 1 && last_state == 0 && millis() - last_switch_time > 200)
+    if(pin_state == 1 && last_state == 0 && (millis() - last_switch_time > 200 || millis() < last_switch_time))
     {
         last_switch_time = millis();
         light.switch_light();
     }
+    
     last_state = pin_state;
 }
