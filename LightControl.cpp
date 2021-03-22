@@ -5,6 +5,7 @@ LightControl::LightControl(int pin_number)
     pin = pin_number;
     pinMode(pin,OUTPUT);
     digitalWrite(pin,LOW);
+    state = LightControl::OFF;
 }
 
 LightControl::LightState LightControl::get_state()

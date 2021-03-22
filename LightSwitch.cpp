@@ -23,12 +23,12 @@ void LightSwitch::update(LightControl &light)
         if(is_in_analog_mode)
         {
             pin_state = analogRead(pin) > 500 ? 1 : 0;
-            last_read_time = millis();
         }
         else
         {
             pin_state = digitalRead(pin);
         }
+        last_read_time = millis();
     }
     else
     {
@@ -40,6 +40,6 @@ void LightSwitch::update(LightControl &light)
         last_switch_time = millis();
         light.switch_light();
     }
-    
+
     last_state = pin_state;
 }

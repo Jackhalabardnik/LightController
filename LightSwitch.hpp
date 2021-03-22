@@ -14,5 +14,5 @@ private:
     bool last_state, is_in_analog_mode;
     unsigned long last_switch_time;
     unsigned long last_read_time;
-    const int minimal_read_time = 20;
+    const int minimal_read_time = 30;
 };
