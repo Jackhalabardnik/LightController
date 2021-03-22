@@ -10,12 +10,6 @@ WiFiSwitch::WiFiSwitch(LightControl* first_light, LightControl* second_light)
 
 void WiFiSwitch::initialise(const char* SSID, const char* pass)
 {
-    Serial.println("Start");
-
-    delay(10000);
-
-    Serial.println("End");
-
     try_to_connect(SSID, pass);
 
     server.begin(HTTP_port);
@@ -43,8 +37,6 @@ void WiFiSwitch::update()
 
     if (client) {
 
-        Serial.println("new client");
-
         while (client.connected()) {
 
             if (client.available()) {
@@ -55,9 +47,6 @@ void WiFiSwitch::update()
                 char second_command = client.read();
 
                 send_header(client);
-                
-                Serial.write(first_command);
-                Serial.write(second_command);
 
                 bool skipped_first_command = is_command_skipped(first_command);
                 bool skipped_second_command = is_command_skipped(second_command);
@@ -98,8 +87,6 @@ void WiFiSwitch::update()
         delay(1);
 
         client.stop();
-
-        Serial.println("client disonnected");
     }
 }
 
@@ -132,8 +119,6 @@ void WiFiSwitch::send_header(WiFiClient &client)
     client.println("Content-Type: text/html");
 
     client.println("");
-
-    Serial.println("\nConnected");
 }
 
 bool WiFiSwitch::is_command_skipped(char c)
