@@ -28,7 +28,7 @@ Sensor first_sensor, second_sensor;
 int common_trigger_pin;
 unsigned long last_check;
 
-const double triggering_distance = 8.0;
+const double triggering_distance = 10.0;
 const int minimal_swap_time = 500; 
 const int minimal_trigger_time = 50;
 };
