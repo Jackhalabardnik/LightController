@@ -1,34 +1,29 @@
 #pragma once
 
 #include "LightControl.hpp"
+#include "Adafruit_VL53L0X.h"
 
 class HandSwapSensor
 {
-public:
+    public:
 
-HandSwapSensor(int first_echo_pin, int second_echo_pin, int common_trigger_pin, LightControl *first_light, LightControl *second_light);
+    HandSwapSensor(int _SCL_pin, int _SDA_pin, int _second_sensor_power, int _sensor_enable_pin, LightControl *first_light, LightControl *second_light);
 
-void update();
+    void update();
 
-private:
+    void init();
 
-struct Sensor 
-{
-    int echo_pin, last_measured_distance;
-    unsigned long start_echo_time, last_swap_time;
-    bool received_echo;
-    LightControl *light; 
-};
+    private:
 
-void prepare_pins();
-void update_sensor(Sensor &sensor);
+    void prepare_pins();
 
-Sensor first_sensor, second_sensor;
+    int SCL_pin, SDA_pin, second_sensor_power, sensor_enable_pin;
+    long first_sensor_last_distance, second_sensor_last_distance, last_check_time;
 
-int common_trigger_pin;
-unsigned long last_check;
+    const double max_triggering_distance_mm = 100.0, min_triggering_distance_mm = 1.0;
+    const int minimal_measure_time = 25, first_lox_adress = 0x30, second_lox_adress = 0x31;
 
-const double triggering_distance = 10.0;
-const int minimal_swap_time = 500; 
-const int minimal_trigger_time = 50;
+    Adafruit_VL53L0X first_lox, second_lox;
+
+    LightControl *first_light, *second_light;
 };

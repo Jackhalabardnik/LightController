@@ -10,7 +10,7 @@ LightControl second_light(second_SSR_pin);
 LightSwitch first_switch(first_switch_pin, true);
 LightSwitch second_switch(second_switch_pin, false);
 
-HandSwapSensor hand_swap_sensor(first_echo_pin, second_echo_pin, distance_trigger_pin, &first_light, &second_light);
+HandSwapSensor hand_swap_sensor(SCL_pin, SDA_pin, second_sensor_power, sensor_enable_pin, &first_light, &second_light);
 
 WiFiSwitch wifi_switch(&first_light, &second_light);
 
@@ -20,6 +20,7 @@ void setup()
     Serial.println("");
 
     wifi_switch.initialise(ssid, password);
+    hand_swap_sensor.init();
 }
 
 void loop()

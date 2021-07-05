@@ -8,8 +8,10 @@ const int first_SSR_pin = 5;
 
 const int second_SSR_pin = 4;
 
-const int distance_trigger_pin = 15;
+const int second_sensor_power = 15;
 
-const int first_echo_pin = 13;
+const int SDA_pin = 13;
 
-const int second_echo_pin = 14;
+const int SCL_pin = 14;
+
+const int sensor_enable_pin = 0;
