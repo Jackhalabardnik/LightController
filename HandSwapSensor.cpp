@@ -31,18 +31,20 @@ void HandSwapSensor::prepare_pins()
 
     pinMode(sensor_enable_pin, INPUT);
     digitalWrite(sensor_enable_pin,LOW);
+
+    pinMode(debug_led_pin, OUTPUT);
+    digitalWrite(debug_led_pin,HIGH);
 }
 
-void HandSwapSensor::init()
+bool HandSwapSensor::init()
 {
     Wire.pins(SDA_pin,SCL_pin);
 
     if (!first_lox.begin(first_lox_adress, false, &Wire))
     {
         Serial.println(F("Failed to boot first distance sensor"));
-        pinMode(2, OUTPUT);
-        digitalWrite(2,LOW);
-        while(1);
+        show_init_output(InitResult::FIRST_SENSOR_FAILURE);
+        return false;
     }
 
     digitalWrite(second_sensor_power, HIGH);
@@ -51,11 +53,32 @@ void HandSwapSensor::init()
     if (!second_lox.begin(second_lox_adress, false, &Wire))
     {
         Serial.println(F("Failed to boot second distance sensor"));
-        pinMode(2, OUTPUT);
-        digitalWrite(2,LOW);
-        while(1);
+        show_init_output(InitResult::SECOND_SENSOR_FAILURE);
+        return false;
     }
+
+    show_init_output(InitResult::SUCCESS);
+
+    return true;
 }
+
+void HandSwapSensor::show_init_output(int blinks)
+{
+    digitalWrite(debug_led_pin,LOW);
+    delay(500);
+    digitalWrite(debug_led_pin,HIGH);
+    for(int i = 0; i < blinks; i++)
+    {
+        delay(250);
+        digitalWrite(debug_led_pin,LOW);
+        delay(250);
+        digitalWrite(debug_led_pin,HIGH);
+    }
+    digitalWrite(debug_led_pin,LOW);
+    delay(500);
+    digitalWrite(debug_led_pin,HIGH);
+}
+
 void HandSwapSensor::update()
 {
     if(millis() - last_check_time > minimal_measure_time || millis() - last_check_time < 0)

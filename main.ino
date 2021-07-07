@@ -14,13 +14,15 @@ HandSwapSensor hand_swap_sensor(SCL_pin, SDA_pin, second_sensor_power, sensor_en
 
 WiFiSwitch wifi_switch(&first_light, &second_light);
 
+bool is_distance_sensor_working;
+
 void setup()
 {
     Serial.begin(115200);
     Serial.println("");
 
     wifi_switch.initialise(ssid, password);
-    hand_swap_sensor.init();
+    is_distance_sensor_working = hand_swap_sensor.init();
 }
 
 void loop()
@@ -28,5 +30,8 @@ void loop()
     wifi_switch.update();
     first_switch.update(first_light);
     second_switch.update(second_light);
-    hand_swap_sensor.update();
+    if(is_distance_sensor_working)
+    {
+        hand_swap_sensor.update();
+    } 
 }
