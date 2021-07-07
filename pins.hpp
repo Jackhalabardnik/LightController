@@ -14,4 +14,4 @@ const int SDA_pin = 13;
 
 const int SCL_pin = 14;
 
-const int sensor_enable_pin = 0;
+const int sensor_enable_pin = 16;

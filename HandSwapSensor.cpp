@@ -40,6 +40,8 @@ void HandSwapSensor::init()
     if (!first_lox.begin(first_lox_adress, false, &Wire))
     {
         Serial.println(F("Failed to boot first distance sensor"));
+        pinMode(2, OUTPUT);
+        digitalWrite(2,LOW);
         while(1);
     }
 
@@ -49,6 +51,8 @@ void HandSwapSensor::init()
     if (!second_lox.begin(second_lox_adress, false, &Wire))
     {
         Serial.println(F("Failed to boot second distance sensor"));
+        pinMode(2, OUTPUT);
+        digitalWrite(2,LOW);
         while(1);
     }
 }

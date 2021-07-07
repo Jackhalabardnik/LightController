@@ -43,8 +43,8 @@ void WiFiSwitch::update()
 
                 strap_POST_header(client);
 
-                char first_command = client.read();
-                char second_command = client.read();
+                int first_command = int(client.read());
+                int second_command = int(client.read());
 
                 send_header(client);
 
@@ -121,28 +121,35 @@ void WiFiSwitch::send_header(WiFiClient &client)
     client.println("");
 }
 
-bool WiFiSwitch::is_command_skipped(char c)
+bool WiFiSwitch::is_command_skipped(int c)
 {
-    return c == '2';
+    return c == WiFiCommand::SKIP;
 }
 
-bool WiFiSwitch::is_good_command(char c)
+bool WiFiSwitch::is_good_command(int c)
 {
-    return (c == '0' || c == '1');
+    return (c == WiFiCommand::TURN_OFF || c == WiFiCommand::TURN_ON || c == WiFiCommand::SWITCH);
 }
 
-bool WiFiSwitch::try_to_parse_command(LightControl &light, char command)
+bool WiFiSwitch::try_to_parse_command(LightControl &light, int command)
 {
     if(is_good_command(command) == false)
     {
         return false;
     }
 
-    int mode = int(command) - int('0');
-
-    LightControl::LightState state = mode == 0 ? LightControl::LightState::OFF : LightControl::LightState::ON;
-
-    return light.try_to_set_state(state);
+    if(command == WiFiCommand::SWITCH)
+    {
+        light.switch_light();
+        return true;
+    }
+    
+    if(command == WiFiCommand::TURN_ON)
+    {
+        return light.try_to_set_state(LightControl::LightState::ON);
+    }
+    
+    return light.try_to_set_state(LightControl::LightState::OFF);
 }
 
 
