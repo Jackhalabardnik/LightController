@@ -102,7 +102,7 @@ void HandSwapSensor::update()
             }
             else
             {
-                first_sensor_last_distance = max_triggering_distance_mm + 10;
+                first_sensor_last_distance = max_triggering_distance_mm + additional_distance;
             }
 
             if (second_measure.RangeStatus == 0)
@@ -116,7 +116,7 @@ void HandSwapSensor::update()
             }
             else
             {
-                second_sensor_last_distance = 110;
+                second_sensor_last_distance = max_triggering_distance_mm + additional_distance;
             }
             
         }
