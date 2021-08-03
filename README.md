@@ -14,7 +14,7 @@ If you attempt to build it, you do so at your own risk.
 
 Table of contents:
 1. Quick run instruction
-2. Electrical shema
+2. Electrical schema
 3. Important notes
 
 <h2>
@@ -32,19 +32,21 @@ Of course you will need to change \"AAA\" to your WiFi SSID and \"BBB\" to your 
 2. Electrical shema
 </h2>
 
-For input I\'m using two HCSR-04 to recognise hand-swap and two microswitches.
+For input I\'m using two VL53L0X to recognise hand-swap and two microswitches.
 For output I\'m using two SSRs to switch light on and off.
 
 Pinout:
 
-- D8 (output) is a common trigger for both HC-SR04.
-- D7 (input) is a input from first HC-SR04 echo.
+- D8 (output) is a second sensor VCC<sup>1</sup>.
+- D7 (input) is an I2C SDA.
 - D6 (input) is a input from second microswitch.
-- D7 (input) is a input from second HC-SR04 echo.
+- D5 (input) is an I2C SCL.
 - D2 (output) is a output for second SSR.
-- D2 (output) is a output for first SSR.
+- D1 (output) is a output for first SSR.
+- D0 (input) is a input from manual switch (turn off/on distance sensors)
 - A0 (input) is a input from first microswitch.
 
+<sup>1</sup> I know that I should use another pin to turn off/on I2C sensor, but previous version used only 8 outputs on a board to operate distance sensors and because sensor current is about 10mA I decided to use this trick and do less soldering.  
 
 <h2>
 3. Important notes
