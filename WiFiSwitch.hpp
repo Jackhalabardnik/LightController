@@ -37,6 +37,6 @@ public:
         SKIP = int('3')
     };
 
-    const int HTTP_port = 80;
+    const int HTTP_port = 80, disconnect_delay = 1;
 
 };

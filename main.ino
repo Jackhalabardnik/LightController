@@ -16,9 +16,11 @@ WiFiSwitch wifi_switch(&first_light, &second_light);
 
 bool is_distance_sensor_working;
 
+const int baud_rate = 115200;
+
 void setup()
 {
-    Serial.begin(115200);
+    Serial.begin(baud_rate);
     Serial.println("");
 
     wifi_switch.initialise(ssid, password);

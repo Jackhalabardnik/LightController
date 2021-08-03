@@ -48,7 +48,7 @@ bool HandSwapSensor::init()
     }
 
     digitalWrite(second_sensor_power, HIGH);
-    delay(10);
+    delay(power_ms_delay);
 
     if (!second_lox.begin(second_lox_adress, false, &Wire))
     {
@@ -65,17 +65,17 @@ bool HandSwapSensor::init()
 void HandSwapSensor::show_init_output(int blinks)
 {
     digitalWrite(debug_led_pin,LOW);
-    delay(500);
+    delay(long_blink_led_ms_delay);
     digitalWrite(debug_led_pin,HIGH);
     for(int i = 0; i < blinks; i++)
     {
-        delay(250);
+        delay(short_blink_led_ms_delay);
         digitalWrite(debug_led_pin,LOW);
-        delay(250);
+        delay(short_blink_led_ms_delay);
         digitalWrite(debug_led_pin,HIGH);
     }
     digitalWrite(debug_led_pin,LOW);
-    delay(500);
+    delay(long_blink_led_ms_delay);
     digitalWrite(debug_led_pin,HIGH);
 }
 
@@ -91,7 +91,7 @@ void HandSwapSensor::update()
             first_lox.rangingTest(&first_measure, false);
             second_lox.rangingTest(&second_measure, false);
 
-            if (first_measure.RangeStatus == 0)
+            if (first_measure.RangeStatus == distance_measured_successfully)
             {
                 int distance = first_measure.RangeMilliMeter;
                 if(distance < max_triggering_distance_mm && distance > min_triggering_distance_mm && first_sensor_last_distance > max_triggering_distance_mm)
@@ -105,7 +105,7 @@ void HandSwapSensor::update()
                 first_sensor_last_distance = max_triggering_distance_mm + additional_distance;
             }
 
-            if (second_measure.RangeStatus == 0)
+            if (second_measure.RangeStatus == distance_measured_successfully)
             {
                 int distance = second_measure.RangeMilliMeter;
                 if(distance < max_triggering_distance_mm && distance > min_triggering_distance_mm && second_sensor_last_distance > max_triggering_distance_mm)

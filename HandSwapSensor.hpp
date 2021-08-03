@@ -30,7 +30,9 @@ class HandSwapSensor
     long first_sensor_last_distance, second_sensor_last_distance, last_check_time;
 
     const double max_triggering_distance_mm = 150.0, min_triggering_distance_mm = 1.0, additional_distance = 10.0;
-    const int minimal_measure_time = 25, first_lox_adress = 0x30, second_lox_adress = 0x31, debug_led_pin = 2;
+    const int minimal_measure_time = 25, first_lox_adress = 0x30, second_lox_adress = 0x31, 
+              debug_led_pin = 2, power_ms_delay = 10, long_blink_led_ms_delay = 500, short_blink_led_ms_delay = 250,
+              distance_measured_successfully = 0;
 
     Adafruit_VL53L0X first_lox, second_lox;
 

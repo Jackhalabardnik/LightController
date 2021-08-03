@@ -84,7 +84,7 @@ void WiFiSwitch::update()
             }
         }
 
-        delay(1);
+        delay(disconnect_delay);
 
         client.stop();
     }
