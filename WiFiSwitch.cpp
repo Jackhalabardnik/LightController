@@ -48,36 +48,15 @@ void WiFiSwitch::update()
 
                 send_header(client);
 
-                bool skipped_first_command = is_command_skipped(first_command);
-                bool skipped_second_command = is_command_skipped(second_command);
+                std::string message;
 
-                bool result;
-
-                if(skipped_first_command && skipped_second_command)
+                if(first_command == WiFiCommand::STATUS)
                 {
-                    result = true;
-                }
-                else if(skipped_first_command)
-                {
-                    result = try_to_parse_command(*second_light, second_command);
-                }
-                else if(skipped_second_command)
-                {
-                    result = try_to_parse_command(*first_light, first_command);
+                    message = get_light_status();
                 }
                 else
                 {
-                    result = try_to_parse_command(*first_light, first_command);
-                    result |= try_to_parse_command(*second_light, second_command);
-                }
-
-                if(result)
-                {
-                    client.println("OK");
-                }
-                else
-                {
-                    client.println("ERR");
+                    message = change_lights(first_command, second_command);
                 }
 
                 break;
@@ -121,14 +100,38 @@ void WiFiSwitch::send_header(WiFiClient &client)
     client.println("");
 }
 
-bool WiFiSwitch::is_command_skipped(int c)
-{
-    return c == WiFiCommand::SKIP;
-}
-
 bool WiFiSwitch::is_good_command(int c)
 {
     return (c == WiFiCommand::TURN_OFF || c == WiFiCommand::TURN_ON || c == WiFiCommand::SWITCH);
+}
+
+std::string WiFiSwitch::change_lights(int first_command, int second_command)
+{
+    bool result;
+
+    if(first_command == WiFiCommand::SKIP && second_command == WiFiCommand::SKIP)
+    {
+        result = true;
+    }
+    else if(first_command == WiFiCommand::SKIP)
+    {
+        result = try_to_parse_command(*second_light, second_command);
+    }
+    else if(second_command == WiFiCommand::SKIP)
+    {
+        result = try_to_parse_command(*first_light, first_command);
+    }
+    else
+    {
+        result = try_to_parse_command(*first_light, first_command);
+        result |= try_to_parse_command(*second_light, second_command);
+    }
+
+    if(result)
+    {
+        return "0";
+    }
+    return "1";
 }
 
 bool WiFiSwitch::try_to_parse_command(LightControl &light, int command)
@@ -152,4 +155,26 @@ bool WiFiSwitch::try_to_parse_command(LightControl &light, int command)
     return light.try_to_set_state(LightControl::LightState::OFF);
 }
 
+std::string WiFiSwitch::get_light_status()
+{
+    std::string status;
+    if(first_light->get_state() == LightControl::LightState::ON)
+    {
+        status += "1";
+    }
+    else
+    {
+        status += "0";
+    }
 
+    if(second_light->get_state() == LightControl::LightState::ON)
+    {
+        status += "1";
+    }
+    else
+    {
+        status += "0";
+    }
+
+    return status;
+}
