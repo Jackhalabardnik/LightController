@@ -59,6 +59,8 @@ void WiFiSwitch::update()
                     message = change_lights(first_command, second_command);
                 }
 
+                client.println(message.c_str());
+
                 break;
             }
         }
